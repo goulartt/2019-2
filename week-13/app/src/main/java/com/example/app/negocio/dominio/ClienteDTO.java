@@ -1,10 +1,17 @@
 package com.example.app.negocio.dominio;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.example.app.negocio.excecao.NomeMenorCincoCaracteresException;
 import com.example.app.negocio.excecao.PaisNaoDefinidoException;
 import com.example.app.negocio.validador.FabricaValidadorTelefone;
 import com.example.app.negocio.validador.TelefoneNaoCorrespondePaisException;
+import com.example.app.persistencia.Cliente;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,6 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 public class ClienteDTO {
     
     private int id;
@@ -73,4 +81,35 @@ public class ClienteDTO {
         else
             throw new TelefoneNaoCorrespondePaisException();
     }
+
+	public static Cliente entityFromDTO(ClienteDTO cliente) {
+		return Cliente.builder()
+                .id(Long.valueOf(cliente.getId()))
+                .nome(cliente.getNome())
+                .idade(cliente.getIdade())
+                .limiteCredito(cliente.getLimiteCredito())
+                .telefone(cliente.getTelefone())
+                .pais(PaisDTO.EntityFromDTO(cliente.getPais()))
+               .build();
+	}
+
+	public static Set<ClienteDTO> DTOsFromEntities(List<Cliente> clientes) {
+		var resultado = new HashSet<ClienteDTO>();
+
+        for (Cliente cliente : clientes) 
+            resultado.add(ClienteDTO.DTOFromEntity(cliente));
+
+        return resultado;
+	}
+
+	private static ClienteDTO DTOFromEntity(Cliente cliente) {
+		return ClienteDTO.builder()
+                .id(cliente.getId().intValue())
+                .nome(cliente.getNome())
+                .idade(cliente.getIdade())
+                .limiteCredito(cliente.getLimiteCredito())
+                .telefone(cliente.getTelefone())
+                .pais(PaisDTO.DTOFromEntity(cliente.getPais()))
+               .build();
+	}
 }

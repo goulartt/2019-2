@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PaisDTO {
 
-    private Long id;
+    private int id;
 
     @EqualsAndHashCode.Include
     private String nome;
@@ -26,7 +26,7 @@ public class PaisDTO {
 
     public static PaisDTO DTOFromEntity(Pais pais) {
         return PaisDTO.builder()
-                .id(pais.getId())
+                .id(pais.getId().intValue())
                 .nome(pais.getNome())
                 .sigla(SiglaPaisDTO.valueOf(pais.getSigla()))
                 .build();
@@ -43,7 +43,7 @@ public class PaisDTO {
     
     public static Pais EntityFromDTO (PaisDTO pais) {
         return Pais.builder()
-                .id(pais.getId())
+                .id(Long.valueOf(pais.getId()))
                 .nome(pais.getNome())
                 .sigla(pais.getSigla().toString())
                .build();
@@ -60,7 +60,7 @@ public class PaisDTO {
     
     public static PaisModel ModelFromDTO (PaisDTO pais) {
         return PaisModel.builder()
-                    .id(pais.getId())
+                    .id(Long.valueOf(pais.getId()))
                     .nome(pais.getNome())
                     .sigla(pais.getSigla().toString())
                     .build();
@@ -68,7 +68,7 @@ public class PaisDTO {
     
     public static PaisDTO DTOFromModel (PaisModel pais) {
         return PaisDTO.builder()
-                .id(pais.getId())
+                .id(pais.getId().intValue())
                 .nome(pais.getNome())
                 .sigla(SiglaPaisDTO.valueOf(pais.getSigla()))
                 .build();
